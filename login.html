@@ -1,0 +1,247 @@
+    <html>
+    <head>
+        <title>Nowigence Login</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Bootstrap CSS and bootstrap datepicker CSS used for styling the demo pages-->
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+         <script src="bootstrap/js/jquery-2.2.3.min.js"></script>
+         <script src="bootstrap/js/bootstrap.min.js"></script>        
+         <script src="bootstrap/js/angular.min.js"></script>
+          <link rel="stylesheet" href="css/styles.css">
+         <style type="text/css">
+         	body{font-family:ptSans;background:#fff;}
+         	        	    @media (max-width: 767px) {
+    font-size:medium;
+}
+		.header2{
+		  padding-top: 1vh;
+		  padding-bottom: 2vh;
+		  height:10vh;
+		  @media (max-width: 767px) {
+		    height:auto;
+		}         	
+			h3 {text-align:left;}
+         </style>
+		
+    </head>
+<body ng-app="loginApp" ng-controller="loginController">
+<!-- <header ng-include="'includes/header.html'"></header> -->
+<!--   <div class="container-fluid header1">
+    <div class="col-md-2 logo">
+      <img src="img/logo.png" class="logo img-responsive" alt="Nowigence logo"/>
+    </div>
+    <div class="col-md-8 company-title center-block">
+      <h1 class="company-title">
+        My Virtual Analyst
+      </h1>
+    </div>
+    <div class="col-md-2">
+      <div class="login-area text-right">
+        <p>
+          <span class="glyphicon glyphicon-user"></span>  
+        </p>
+      </div>
+    </div>
+  </div> -->
+ <div class="container-fluid header2">
+    <div class="col-md-3 col-xs-12">
+      <img src="img/logo.png" class="logo img-responsive" alt="Nowigence logo"/>
+    </div>
+    <div class="col-md-2">
+
+    </div>    
+
+    <div class="col-md-2 center-block" >
+		<!-- <div style="background:rgb(255,194,15);color:rgb(56,80,76);font-size:16px;padding:5px;margin-top:7px;" ng-click="act()"><img style="height:18px;" src="img/email-analyst.svg"> Email Analyst</div> -->
+    </div>  
+    <div class="col-md-3 center-block" style="border-right:0px solid rgb(200,200,200)">
+      <h1 class="company-title" style="text-align:right;">
+      </h1>
+    </div>   
+    <div class="col-md-2 center-block" >
+<!-- 		<div style="background:rgb(255,194,15);color:rgb(56,80,76);font-size:16px;padding:5px;margin-top:7px;position:relative;">
+			<img style="height:18px;" src="img/username.svg">              
+		</div> -->
+    </div>
+ </div>  
+  
+  <div style="height:20px;"></div>
+<div class="col-md-4 col-md-offset-4" style="border-left:4px solid rgb(57,162,120);padding-left:40px;">
+    <h2>Login</h2><hr><br>
+   
+
+    <form  class= novalidate  name="loginForm" ng-submit="loginUser(loginForm.$valid)" role="form">
+        <div class="form-group" ng-class="{ 'has-error': loginForm.uname.$invalid && fSubmitted}">
+            <label for="emailaddress">User Id</label>
+            <input type="text" id="username"  class="form-control " name="uname" ng-model="user.username" required />
+            
+            <!-- <span ng-show="loginForm.uname.$error.required" class="help-block">Username is required</span> -->
+            <span ng-show="loginForm.uname.$error.required && fSubmitted" class="help-block">Email is required</span>
+           <!--  <span ng-show="loginForm.uname.$error.email && fSubmitted" class="help-block">Invalid Email</span> -->
+        </div>
+        
+
+        <div class="form-group" ng-class="{ 'has-error': loginForm.password.$invalid && fSubmitted}">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control " ng-model="user.password" required />
+            <span ng-show="loginForm.password.$error.required && fSubmitted" class="help-block">Password is required</span>
+        </div>
+		
+
+    <div class="alert alert-danger" role="alert" ng-show="errorMsg"  >{{errorMsg}}</div>  <!-- style="height:36px;padding:8px;" -->
+		<!-- <div class="alert alert-danger" role="alert" ng-show="!errorMsg" style="height:36px;background:transparent;border:0;"></div> -->
+        
+            <!--<button type="submit" ng-disabled="loginForm.$invalid || user.dataLoading" class="btn btn-primary">Login</button>-->
+			
+
+      <button type="submit" ng-disabled="user.dataLoading" class="btn btn-success"> Login </button>
+            <img ng-if="user.dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+            <input type="button" ng-disabled="loginForm.uname.$invalid" ng-click="resetPass()" class="btn btn-link" value="Forgot Password"><!-- <a href="" class="btn btn-link">Register</a> -->
+       		<br><br>Copyright &copy; Nowigence, Inc.  2015 – 2017, all rights reserved
+    </form>
+</div>
+
+
+<div id="resetPass" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+         <h4 class="modal-title">Reset Password</h4>
+      </div>
+      <form novalidate  name="passForm" ng-submit="resetPass(passForm.$valid)" role="form">
+      <div class="modal-body">
+			<div class="alert alert-danger" ng-show="passError">
+				<span style="font-size:150%;">{{errorMsg}}</span>
+			</div>				      
+	        <div class="form-group" ng-class="{ 'has-error': passForm.email.$invalid && formSubmitted}">
+	            <label for="email">Email Id</label>
+              
+	            <input type="email" id="email" name="email" class="form-control" ng-model="pass.email" required />
+	            <span ng-show="passForm.email.$error.required && formSubmitted" class="help-block">Email is required</span>
+	            <span ng-show="passForm.email.$error.email && formSubmitted" class="help-block">Invalid Email</span> 
+	        </div>	
+					        				        				        
+      </div>
+      <div class="modal-footer">
+     	<img ng-if="formSent" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+      	<button type="submit" ng-disabled="indSubmitted" class="btn btn-primary">Reset</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalText" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" id="mGraph">
+        <div class="modal-content" style="text-align:center;">
+            <div class="modal-header" style="text-align:center;font-size:150%;">
+				<h4 class="modal-title">System under maintenance</h4>			
+            </div>
+            <div class="modal-body" style="text-align:center;font-size:110%;">
+            <img ng-if="fetchingText" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />            	
+             <p ng-if="fetchingText"></p>
+             <p style="text-align:center;">... will be up shortly</p>
+            </div>
+<!--             <div class="modal-footer">
+                <a class="btn btn-default" data-dismiss="modal">Close</a>                
+            </div> -->
+        </div>
+    </div>
+</div>
+<img src="img/INsightLogo_V1.png" style="position:absolute;bottom:2px;right:4px;height:4vh" alt="Nowigence logo"/>
+<form name="entryForm" action="dashboard.jsp" method="post"><input type="hidden" name="data"><input type="hidden" name="logonTk" value="d5c57a1681bd629ce03ec9a4ecd049d4"></form>
+
+	<script>
+		var loginApp = angular.module("loginApp", []);
+		loginApp.controller('loginController', function($scope,$http) {
+			// create a blank object to handle form data.
+			//$('#modalText').modal('toggle');
+			$scope.user = {};
+			$scope.errorMsg = '';
+			$scope.user.dataLoading=false;
+			$scope.formSubmitted=false;
+			$scope.fSubmitted = false;
+			$scope.formSent = false;
+			// calling our submit function.
+			$scope.showReset = function() {
+				
+				$('#resetPass').modal('toggle');
+			}
+			$scope.resetPass = function() {
+				$scope.user.dataLoading=true;
+				var encodedString='name='+encodeURIComponent($scope.user.username);
+				$http({
+					method : 'POST',
+					url : 'https://service.mynowigence.com/service/rest/jsonServices/resetPass',
+					data : encodedString,
+					headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
+					})
+					.success(function(data) {
+						//console.log(JSON.stringify(data));
+						$scope.user.dataLoading=false;
+						//$scope.formSent=false;
+						//console.log(data.length);
+ 						if (data.userId==null) {
+ 							$scope.errorMsg = 'Incorrect User Id. Password not sent.';					
+ 						}
+						else {
+							$scope.errorMsg = 'Password has been sent to your email Id.';	
+						} 
+					})
+					.error(function(data) {
+						$scope.user.dataLoading=false;
+						$scope.errorMsg = 'Unable to submit form';
+				});		
+			};
+			
+			$scope.loginUser = function(isValid) {
+				//alert(isValid);
+				$scope.fSubmitted = true;
+				if (!isValid) return;
+				$scope.user.dataLoading=true;
+				//var encodedString='username='+encodeURIComponent($scope.user.username)+'&password='+encodeURIComponent($scope.user.password);
+				var encodedString='name='+encodeURIComponent($scope.user.username)+'&pass='+encodeURIComponent($scope.user.password);
+				$http({
+					method : 'POST',
+					url : 'https://service.mynowigence.com/service/rest/jsonServices/validate',
+					//url : 'http://localhost:8081/Services/rest/jsonServices/validate',
+					data : encodedString,
+					headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
+					})
+					.success(function(data) {
+						//console.log(JSON.stringify(data));return;
+
+						//console.log(data.length);
+ 						if (data.error=="success") {
+ 							data.roleId="102";
+ 							if (data.userId=="1328") document.entryForm.action="https://service.mynowigence.com/News/index.jsp";
+ 							else if (data.roleId=="109") document.entryForm.action="mHome.jsp";
+ 							else if (data.roleId=="101") document.entryForm.action="mHome.jsp";
+ 							else if (data.roleId=="102") document.entryForm.action="planMaster.jsp";
+ 							else if (data.roleId=="105") document.entryForm.action="https://service.mynowigence.com/News/index.jsp?userData="+data.password;
+ 							//else if (data.roleId=="105") document.entryForm.action="http://localhost:8081/News/index.jsp?userData="+data.password;
+ 							else if (data.roleId=="107") document.entryForm.action="mHome.jsp";
+ 							else document.entryForm.action="home.jsp";
+ 							document.entryForm.data.value=JSON.stringify(data);
+ 							document.entryForm.submit(); 							
+ 						}
+						else {
+							$scope.user.dataLoading=false;
+							$scope.errorMsg = 'Incorrect Email/Passsword';
+						} 
+					})
+					.error(function(data) {
+						$scope.user.dataLoading=false;
+						$scope.errorMsg = 'Unable to submit form';
+				});			
+			};
+		});
+	</script>
+
+</body>
+</html>
+    
+    
